@@ -164,3 +164,77 @@ If given another 48 hours, the following features would be evaluated for inclusi
 2. **Daemonization**: Running the scheduler in the background (via `launchd` on macOS or `systemd` on Linux) so the user doesn't need to keep a terminal tab open.
 3. **OS Notifications**: Integrating with `osascript` (macOS) or `notify-send` (Linux) to trigger native system notifications alongside the terminal banner.
 4. **Data Pruning**: A `clean` command (or auto-pruning) to remove `DISMISSED` and `MISSED` alarms older than 30 days to prevent the JSON file from growing indefinitely.
+
+---
+
+### Platform Support
+
+The application is fully supported on macOS and Linux.
+
+The 60-second timeout feature uses `select.select()` on `stdin`, which is not supported on native Windows terminals.
+
+Windows users can run the application through:
+
+- Windows Subsystem for Linux (WSL)
+- Git Bash
+- Linux/macOS environments
+
+This tradeoff was chosen intentionally to keep the implementation single-threaded and easy to reason about.
+
+## Engineering Process
+
+The project was developed in four phases:
+
+### Phase 1 — Requirement Refinement
+The original problem statement intentionally left many requirements unspecified.
+
+Key decisions:
+- Single-user application
+- JSON persistence
+- Human-readable time parsing
+- Explicit alarm lifecycle
+- Optional snooze support
+
+### Phase 2 — Architecture Design
+The system was decomposed into:
+- Domain layer
+- Persistence layer
+- Scheduling layer
+- Terminal UI layer
+
+Each module has a single responsibility.
+
+### Phase 3 — Implementation Planning
+Before coding, interfaces, state transitions, validation rules, and test cases were defined.
+
+### Phase 4 — Implementation and Testing
+Code was generated, reviewed, manually tested, and validated with automated tests.
+
+```text
+                 +----------------+
+                 |     cli.py     |
+                 +--------+-------+
+                          |
+                          v
+                 +----------------+
+                 |  scheduler.py  |
+                 +--------+-------+
+                          |
+          +---------------+---------------+
+          |                               |
+          v                               v
+ +----------------+            +----------------+
+ |  notifier.py   |            |   storage.py   |
+ +----------------+            +--------+-------+
+                                        |
+                                        v
+                               +----------------+
+                               |  alarms.json   |
+                               +----------------+
+
+                ^
+                |
+       +----------------+
+       |   models.py    |
+       +----------------+
+```
