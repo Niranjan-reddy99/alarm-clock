@@ -1,0 +1,26 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# pytest cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Runtime alarm data (auto-created on first write)
+alarms.json
+*.json.tmp
+
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+.vscode/
