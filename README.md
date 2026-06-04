@@ -210,31 +210,9 @@ Before coding, interfaces, state transitions, validation rules, and test cases w
 ### Phase 4 — Implementation and Testing
 Code was generated, reviewed, manually tested, and validated with automated tests.
 
-```text
-                 +----------------+
-                 |     cli.py     |
-                 +--------+-------+
-                          |
-                          v
-                 +----------------+
-                 |  scheduler.py  |
-                 +--------+-------+
-                          |
-          +---------------+---------------+
-          |                               |
-          v                               v
- +----------------+            +----------------+
- |  notifier.py   |            |   storage.py   |
- +----------------+            +--------+-------+
-                                        |
-                                        v
-                               +----------------+
-                               |  alarms.json   |
-                               +----------------+
+![System Architecture](HighLevelDesign_AlarmClock.png)
 
-                ^
-                |
-       +----------------+
-       |   models.py    |
-       +----------------+
-```
+### Alarm State Transitions
+The system follows a strict state machine to manage alarm lifecycles and ensure resilience.
+
+![Alarm State Transitions](AlarmStateMachine.png)
